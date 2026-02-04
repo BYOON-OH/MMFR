@@ -1,19 +1,11 @@
 const express = require('express');
 const axios = require('axios');
-const path = require('path');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-let serverCache = {
-    macro: {},
-    fng: { value: "--", status: "LOADING" }
-};
-
-const MACRO_SYMBOLS = { 
-    'nasdaq': '^IXIC', 'snp': '^GSPC', 'gold': 'GC=F', 'silver': 'SI=F', 
-    'us10y': '^TNX', 'kospi': '^KS11', 'usdkrw': 'KRW=X', 'vix': '^VIX' 
-};
+let serverCache = { macro: {}, fng: { value: "--", status: "LOADING" } };
+const MACRO_SYMBOLS = { 'nasdaq': '^IXIC', 'snp': '^GSPC', 'gold': 'GC=F', 'silver': 'SI=F', 'us10y': '^TNX', 'kospi': '^KS11', 'usdkrw': 'KRW=X', 'vix': '^VIX' };
 
 async function fetchAllData() {
     for (const [id, sym] of Object.entries(MACRO_SYMBOLS)) {
@@ -22,12 +14,9 @@ async function fetchAllData() {
             const res = await axios.get(url);
             if (res.data.chart.result) {
                 const m = res.data.chart.result[0].meta;
-                serverCache.macro[id] = {
-                    price: m.regularMarketPrice,
-                    pct: ((m.regularMarketPrice - m.chartPreviousClose) / m.chartPreviousClose * 100).toFixed(2)
-                };
+                serverCache.macro[id] = { price: m.regularMarketPrice, pct: ((m.regularMarketPrice - m.chartPreviousClose) / m.chartPreviousClose * 100).toFixed(2) };
             }
-        } catch (e) { console.log(`${id} fail`); }
+        } catch (e) {}
     }
     try {
         const res = await axios.get('https://api.alternative.me/fng/?limit=1');
@@ -35,12 +24,7 @@ async function fetchAllData() {
     } catch (e) {}
     io.emit('serverUpdate', serverCache);
 }
-
-setInterval(fetchAllData, 60000);
-fetchAllData();
-
+setInterval(fetchAllData, 60000); fetchAllData();
 app.use(express.static(__dirname));
 io.on('connection', (socket) => { socket.emit('initData', serverCache); });
-
-const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+http.listen(process.env.PORT || 3000);
