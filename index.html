@@ -1,119 +1,61 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Quant Terminal</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://s3.tradingview.com/tv.js"></script>
-</head>
-<body>
-    <div class="terminal-wrapper">
-        <header class="main-header">
-            <div class="brand-logo">QUANT_TERMINAL<span class="live-tag">LIVE</span></div>
-            <div id="current-date" style="font-family:'JetBrains Mono'; color:var(--dim);"></div>
-            
-            <div class="fg-widget-large">
-                <div class="fg-header">
-                    <span class="fg-title">FEAR & GREED INDEX</span>
-                    <span id="fg-status" class="fg-status-label">LOADING</span>
-                </div>
-                <div id="fg-score" class="fg-score">--</div>
-                <div class="fg-gauge-outer">
-                    <div id="fg-bar" class="fg-bar-fill"></div>
-                </div>
+<div class="terminal-wrapper">
+    <header class="main-header">
+        <div class="brand-logo">QUANT<span class="text-up">X</span><span class="live-tag">LIVE</span></div>
+        <div id="current-date" class="ins-timer"></div>
+        <div class="fg-widget-large">
+            <div class="fg-header">
+                <span class="fg-title">FEAR & GREED INDEX</span>
+                <span id="fg-status" class="fg-status-label">LOADING</span>
             </div>
-        </header>
+            <span id="fg-score" class="fg-score">--</span>
+            <div class="fg-gauge-outer"><div id="fg-bar" class="fg-bar-fill"></div></div>
+        </div>
+    </header>
 
-        <section class="market-sessions">
-            <div id="sess-tokyo" class="session-box">
-                <div class="s-info"><span class="s-name">TOKYO</span><span class="s-time">09:00 - 15:30</span></div>
-                <div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div>
-            </div>
-            <div id="sess-london" class="session-box">
-                <div class="s-info"><span class="s-name">LONDON</span><span class="s-time">08:00 - 16:30</span></div>
-                <div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div>
-            </div>
-            <div id="sess-newyork" class="session-box">
-                <div class="s-info"><span class="s-name">NEW YORK</span><span class="s-time">09:30 - 16:00</span></div>
-                <div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div>
-            </div>
-        </section>
+    <div class="market-sessions">
+        <div id="sess-tokyo" class="session-box"><div class="s-info"><span class="s-name">TOKYO</span><span class="s-time">09:00 - 15:30</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div></div>
+        <div id="sess-london" class="session-box"><div class="s-info"><span class="s-name">LONDON</span><span class="s-time">08:00 - 16:30</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div></div>
+        <div id="sess-newyork" class="session-box"><div class="s-info"><span class="s-name">NEW YORK</span><span class="s-time">09:30 - 16:00</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><div class="s-dot"></div></div></div>
+    </div>
 
-        <div class="dashboard-content">
-            <div class="panel">
-                <div class="panel-header"><h2>CRYPTO_WATCH</h2></div>
-                <div class="price-grid">
-                    <div class="price-card chart-trigger" id="card-btc">
-                        <div class="p-head"><span>BTC/USDT</span><span id="pct-btc" class="price-chg">--%</span></div>
-                        <div id="price-btc" class="price-val">--</div>
-                    </div>
-                    <div class="price-card chart-trigger" id="card-eth">
-                        <div class="p-head"><span>ETH/USDT</span><span id="pct-eth" class="price-chg">--%</span></div>
-                        <div id="price-eth" class="price-val">--</div>
-                    </div>
-                    <div class="price-card chart-trigger" id="card-sol">
-                        <div class="p-head"><span>SOL/USDT</span><span id="pct-sol" class="price-chg">--%</span></div>
-                        <div id="price-sol" class="price-val">--</div>
-                    </div>
-                    <div class="price-card chart-trigger" id="card-xrp">
-                        <div class="p-head"><span>XRP/USDT</span><span id="pct-xrp" class="price-chg">--%</span></div>
-                        <div id="price-xrp" class="price-val">--</div>
-                    </div>
-                </div>
-
-                <div class="insight-container">
-                    <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC DOMINANCE</span></div>
-                        <div id="btc-dom" class="ins-value">--%</div>
-                    </div>
-                    <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC FUNDING / TIMER</span><span id="funding-timer" class="ins-timer">--</span></div>
-                        <div id="btc-funding" class="ins-value">--%</div>
-                    </div>
-                    <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">OPEN INTEREST (24H)</span></div>
-                        <div id="btc-oi" class="ins-value">--</div>
-                    </div>
-                    <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">LONG/SHORT RATIO</span><span id="ls-ratio-text" class="ls-ratio-val">--</span></div>
-                        <div class="ls-bar-visual">
-                            <div id="long-bar" class="ls-fill long" style="width:50%"></div>
-                            <div id="short-bar" class="ls-fill short" style="width:50%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="liq-wrapper">
-                    <div class="liq-header"><span>LIVE LIQUIDATION</span><span class="liq-sub">BTC/ETH/SOL (>$2K)</span></div>
-                    <div id="liq-list" class="liq-list-box"></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><h2>GLOBAL_MACRO</h2></div>
-                <div class="macro-grid">
-                    <div class="macro-card"><span>NASDAQ</span><div id="price-nasdaq" class="m-price">--</div><div id="pct-nasdaq" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>S&P 500</span><div id="price-snp" class="m-price">--</div><div id="pct-snp" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>KOSPI</span><div id="price-kospi" class="m-price">--</div><div id="pct-kospi" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>GOLD</span><div id="price-gold" class="m-price">--</div><div id="pct-gold" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>SILVER</span><div id="price-silver" class="m-price">--</div><div id="pct-silver" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>US 10Y BOND</span><div id="price-us10y" class="m-price">--</div><div id="pct-us10y" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>USD/KRW</span><div id="price-usdkrw" class="m-price">--</div><div id="pct-usdkrw" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>VIX INDEX</span><div id="price-vix" class="m-price">--</div><div id="pct-vix" class="price-chg">--%</div></div>
+    <div class="intelligence-grid">
+        <div class="intel-box">
+            <div class="intel-label">BTC DOMINANCE</div>
+            <div id="btc-dom" class="intel-value">--%</div>
+        </div>
+        <div class="intel-box">
+            <div class="intel-label">OPEN INTEREST (BTC)</div>
+            <div id="btc-oi" class="intel-value">$--B</div>
+        </div>
+        <div class="intel-box">
+            <div class="intel-label">FUNDING RATE <span id="funding-timer" class="ins-timer">00:00:00</span></div>
+            <div id="btc-funding" class="intel-value text-up">--%</div>
+        </div>
+        <div class="intel-box">
+            <div class="intel-label">LONG/SHORT RATIO (5M)</div>
+            <div class="ls-bar-container">
+                <div class="ls-text"><span id="long-pct">--%</span><span id="short-pct">--%</span></div>
+                <div class="ls-visual-bar">
+                    <div id="long-bar" class="ls-fill long" style="width: 50%"></div>
+                    <div id="short-bar" class="ls-fill short" style="width: 50%"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="chart-modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div id="tradingview_widget"></div>
+    <div class="main-dashboard">
+        <div class="panel">
+            <div class="panel-header"><h2>MARKET INDEXES</h2></div>
+            <div class="price-grid">
+                <div id="card-btc" class="price-card chart-trigger">...</div>
+                </div>
+        </div>
+
+        <div class="liq-panel">
+            <div class="liq-title">LIVE LIQUIDATIONS</div>
+            <div class="liq-list-header"><span>SYMBOL</span><span>SIDE</span><span>VALUE</span></div>
+            <div id="liq-list-content" class="liq-list-content">
+                </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
