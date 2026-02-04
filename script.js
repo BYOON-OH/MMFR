@@ -2,6 +2,7 @@ const socket = io();
 const prevPrices = {};
 let nextFundingTime = 0;
 
+// 1. 서버 데이터 UI 업데이트 (매크로, F&G)
 socket.on('initData', data => updateServerUI(data));
 socket.on('serverUpdate', data => updateServerUI(data));
 
@@ -34,6 +35,7 @@ function updateServerUI(data) {
     }
 }
 
+// 2. 바이낸스 실시간 (가격 및 청산)
 const ws = new WebSocket(`wss://fstream.binance.com/ws/btcusdt@aggTrade/ethusdt@aggTrade/solusdt@aggTrade/xrpusdt@aggTrade/btcusdt@forceOrder`);
 ws.onmessage = (e) => {
     const d = JSON.parse(e.data);
@@ -67,6 +69,7 @@ ws.onmessage = (e) => {
     }
 };
 
+// 3. 펀딩비, 롱숏비, OI 등 상세 인사이트
 async function updateCoinInsights() {
     try {
         const tickers = await (await fetch('https://fapi.binance.com/fapi/v1/ticker/24hr')).json();
@@ -97,6 +100,7 @@ async function updateCoinInsights() {
     } catch(e) {}
 }
 
+// 4. 타이머 및 세션 상태 활성화
 function runTimers() {
     setInterval(() => {
         const now = new Date();
@@ -105,8 +109,8 @@ function runTimers() {
         const setSess = (id, hr, s, e) => {
             const el = document.getElementById(id); if(!el) return;
             const open = (s < e) ? (hr >= s && hr < e) : (hr >= s || hr < e);
-            el.classList.toggle('active', open);
-            el.querySelector('.s-status').innerText = open ? 'OPEN' : 'CLOSED';
+            if(open) el.classList.add('active'); else el.classList.remove('active');
+            el.querySelector('.s-status').innerText = open ? 'MARKET OPEN' : 'MARKET CLOSED';
         };
         setSess('sess-tokyo', (utcHr + 9) % 24, 9, 15.5);
         setSess('sess-london', utcHr % 24, 8, 16.5);
@@ -121,34 +125,22 @@ function runTimers() {
     }, 1000);
 }
 
-
+// 5. 트레이딩뷰 차트 모달 (풀사이즈 보강)
 document.addEventListener('click', e => {
     const trigger = e.target.closest('.chart-trigger');
     if (trigger) {
         const symbol = trigger.id.split('-')[1].toUpperCase();
         document.getElementById('chart-modal').style.display = 'block';
-        
- 
         document.getElementById('tradingview_widget').innerHTML = '';
         new TradingView.widget({
-            "width": "100%",
-            "height": "100%",
-            "symbol": `BINANCE:${symbol}USDT.P`,
-            "interval": "15",
-            "timezone": "Asia/Seoul",
-            "theme": "dark",
-            "style": "1",
-            "locale": "ko",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "hide_side_toolbar": false,
-            "allow_symbol_change": true,
-            "container_id": "tradingview_widget"
+            "width": "100%", "height": "100%", "symbol": `BINANCE:${symbol}USDT.P`,
+            "interval": "15", "theme": "dark", "locale": "ko", "container_id": "tradingview_widget",
+            "autosize": true
         });
     }
     if (e.target.classList.contains('close-modal')) {
         document.getElementById('chart-modal').style.display = 'none';
-        document.getElementById('tradingview_widget').innerHTML = ''; // 메모리 관리
+        document.getElementById('tradingview_widget').innerHTML = '';
     }
 });
 
