@@ -8,76 +8,69 @@
 }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: clamp(10px, 2vw, 20px); overflow-x: hidden; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
 
 .terminal-wrapper { width: 100%; max-width: 1800px; margin: 0 auto; }
 
-/* Header & F&G (생략되지 않도록 유지) */
-.main-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 25px; }
-.brand-logo { font-size: 2.5rem; font-weight: 950; letter-spacing: -2px; }
+/* Header & F&G Widget */
+.main-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }
+.brand-logo { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 950; letter-spacing: -2px; }
+.live-tag { font-size: 0.7rem; background: var(--down); padding: 2px 8px; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
 
-/* [수정] Market Intelligence Grid - 4개 위젯 균형 배치 */
-.intelligence-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: 15px; 
-    margin-bottom: 25px; 
+.fg-widget-large { 
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; 
+    padding: 15px 25px; flex: 1; min-width: 300px; max-width: 450px;
 }
+.fg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.fg-status-label { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; font-weight: 800; text-shadow: 0 0 10px currentColor; }
+.fg-score { font-size: 3.5rem; font-weight: 950; font-family: 'JetBrains Mono'; margin: 5px 0; display: block; }
+.fg-gauge-outer { width: 100%; height: 10px; background: #161b22; border-radius: 20px; overflow: hidden; margin-top: 15px; border: 1px solid #1e293b; }
+.fg-bar-fill { height: 100%; width: 0%; background: var(--fg-grad); box-shadow: 0 0 15px rgba(0, 255, 149, 0.2); transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); }
 
-.intel-box { 
-    background: var(--panel); 
-    border: 1px solid var(--border); 
-    border-radius: 12px; 
-    padding: 20px; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between;
-}
+/* F&G Colors */
+.fg-extreme-fear { color: #ff3c5f; } .fg-fear { color: #ff9f43; } .fg-neutral { color: #feca57; } .fg-greed { color: #00ff95; } .fg-extreme-greed { color: #00d2ff; }
 
-.intel-label { font-size: 0.75rem; font-weight: 800; color: var(--dim); margin-bottom: 10px; display: flex; justify-content: space-between; }
-.intel-value { font-size: 1.8rem; font-weight: 800; font-family: 'JetBrains Mono'; color: var(--text); }
+/* Sessions */
+.market-sessions { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.session-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+.s-dot { width: 8px; height: 8px; border-radius: 50%; background: #2d3748; }
+.active .s-dot { background: var(--up); box-shadow: 0 0 12px var(--up); animation: pulse 2s infinite; }
+.active .s-status { color: var(--up); }
 
-/* [수정] 롱숏비 디자인 전면 개편 */
-.ls-bar-container { margin-top: 15px; }
-.ls-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-family: 'JetBrains Mono'; font-weight: 700; margin-bottom: 6px; }
-.ls-visual-bar { height: 10px; background: #1e293b; border-radius: 5px; display: flex; overflow: hidden; }
-.ls-fill { height: 100%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.ls-fill.long { background: var(--up); box-shadow: 0 0 10px rgba(0, 255, 149, 0.3); }
+/* Dashboard Content */
+.dashboard-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
+@media (max-width: 1100px) { .dashboard-content { grid-template-columns: 1fr; } }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 25px; }
+.panel-header { margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
+.price-grid, .macro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.full-width { grid-column: 1 / -1; }
+.price-card, .macro-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.2s; }
+.price-card:hover { border-color: var(--accent); }
+.price-val, .m-price { font-size: 1.6rem; font-weight: 800; font-family: 'JetBrains Mono'; margin: 8px 0; }
+
+/* Insights & Liq */
+.insight-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+.insight-box { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.ins-timer { font-family: 'JetBrains Mono'; font-size: 0.8rem; color: var(--accent); }
+.ls-bar-visual { height: 8px; background: #1e293b; border-radius: 4px; display: flex; overflow: hidden; margin-top: 10px; }
+.ls-fill { height: 100%; transition: width 0.5s ease; }
+.ls-fill.long { background: var(--up); }
 .ls-fill.short { background: var(--down); }
 
-/* [수정] 리퀴데이션(청산맵) 디자인 - 위치 고정 및 가독성 */
-.liq-panel { 
-    background: var(--panel); border: 1px solid var(--border); border-radius: 16px; 
-    padding: 20px; display: flex; flex-direction: column; height: 320px;
-}
-.liq-title { font-size: 1rem; font-weight: 800; color: var(--accent); margin-bottom: 15px; border-left: 4px solid var(--accent); padding-left: 10px; }
-.liq-list-header { display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 0.7rem; color: var(--dim); padding: 0 10px 10px; border-bottom: 1px solid var(--border); }
-.liq-list-content { flex: 1; overflow: hidden; padding-top: 5px; }
-.liq-row { 
-    display: grid; grid-template-columns: 1fr 1fr 1fr; 
-    padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.85rem; font-weight: 700;
-    border-bottom: 1px solid rgba(255,255,255,0.03); animation: liqFade 0.5s ease-out;
-}
+.liq-wrapper { margin-top: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.liq-header { padding: 12px 20px; font-size: 0.75rem; font-weight: 800; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+.liq-list-box { height: 220px; overflow-y: hidden; padding: 10px; }
+.liq-item { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 8px 10px; font-family: 'JetBrains Mono'; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #111; animation: slideIn 0.3s ease-out; }
 
-/* [수정] 반응형 대시보드 구조 */
-.main-dashboard { 
-    display: grid; 
-    grid-template-columns: 2fr 1fr; 
-    gap: 20px; 
-}
+/* Chart Modal (Fixed Height Issue) */
+#chart-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 1000; }
+.modal-content { width: 92%; height: 85%; margin: 3% auto; position: relative; background: #000; border-radius: 12px; overflow: hidden; }
+#tradingview_widget { width: 100%; height: 100%; } /* 이 부분이 가느다란 현상을 방지 */
+.close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 30px; cursor: pointer; z-index: 1001; }
 
-@media (max-width: 1200px) {
-    .main-dashboard { grid-template-columns: 1fr; }
-}
-
-/* 지수 카드들 */
-.price-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.price-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
-
-/* 세션 위젯 불빛 유지 */
-.market-sessions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 25px; }
-.session-box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
-.active .s-dot { background: var(--up); box-shadow: 0 0 15px var(--up); animation: pulse 2s infinite; }
-
-@keyframes liqFade { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(0, 255, 149, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0); } }
+.text-up { color: var(--up); } .text-down { color: var(--down); }
+.flash-up { animation: flashUp 0.7s; } .flash-down { animation: flashDown 0.7s; }
+@keyframes flashUp { 0% { background: rgba(0,255,149,0.2); } 100% { background: var(--card); } }
+@keyframes flashDown { 0% { background: rgba(255,60,95,0.2); } 100% { background: var(--card); } }
