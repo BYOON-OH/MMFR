@@ -72,3 +72,56 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 .flash-up { animation: flashUp 0.7s; } .flash-down { animation: flashDown 0.7s; }
 @keyframes flashUp { 0% { background: rgba(0,255,149,0.2); } 100% { background: var(--card); } }
 @keyframes flashDown { 0% { background: rgba(255,60,95,0.2); } 100% { background: var(--card); } }
+
+
+/* 하단 AI 섹션 추가 */
+.ai-insight-panel {
+    margin-top: 25px;
+    background: linear-gradient(145deg, #0f172a, #020617);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.ai-icon {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.ai-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+}
+
+.ai-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    min-height: 60px;
+}
+
+.ai-typing {
+    display: inline-block;
+    width: 2px; height: 1.2rem;
+    background: var(--accent);
+    margin-left: 5px;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* 리퀴데이션 등 기존 간격 조정 */
+.dashboard-content { margin-bottom: 0; }
