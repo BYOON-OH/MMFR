@@ -4,6 +4,8 @@
     --bg: #030405; --panel: #0a0c10; --card: #12151a;
     --up: #00ff95; --down: #ff3c5f; --text: #f8fafc;
     --dim: #64748b; --border: #1e293b; --accent: #38bdf8;
+    /* F&G 그라데이션 정의 */
+    --fg-grad: linear-gradient(90deg, #ff3c5f 0%, #feca57 50%, #00ff95 100%);
 }
 
 * { box-sizing: border-box; }
@@ -11,31 +13,39 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 
 .terminal-wrapper { width: 100%; max-width: 1800px; margin: 0 auto; }
 
-/* Header */
+/* Header & F&G Widget */
 .main-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 20px; }
 .brand-logo { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 950; letter-spacing: -2px; }
 .live-tag { font-size: 0.7rem; background: var(--down); padding: 2px 8px; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
 
-/* F&G Widget 수정 */
 .fg-widget-large { 
     background: var(--panel); border: 1px solid var(--border); border-radius: 12px; 
     padding: 15px 25px; flex: 1; min-width: 300px; max-width: 450px;
 }
 .fg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .fg-title { font-size: 0.75rem; color: var(--dim); font-weight: 700; }
-.fg-status-label { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; font-weight: 800; border: 1px solid currentColor; }
-.fg-score { font-size: 3rem; font-weight: 950; font-family: 'JetBrains Mono'; margin: 5px 0; display: block; }
-.fg-gauge-outer { width: 100%; height: 6px; background: #1e293b; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-.fg-bar-fill { height: 100%; width: 0%; transition: width 1s ease, background 1s ease; }
+.fg-status-label { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; font-weight: 800; text-shadow: 0 0 10px currentColor; }
 
-/* 상태별 색상 */
+.fg-score { font-size: 3.5rem; font-weight: 950; font-family: 'JetBrains Mono'; margin: 5px 0; display: block; }
+.fg-gauge-outer { 
+    width: 100%; height: 10px; background: #161b22; border-radius: 20px; 
+    overflow: hidden; margin-top: 15px; border: 1px solid #1e293b;
+}
+.fg-bar-fill { 
+    height: 100%; width: 0%; 
+    background: var(--fg-grad); /* 그라데이션 적용 */
+    box-shadow: 0 0 15px rgba(0, 255, 149, 0.2);
+    transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1); 
+}
+
+/* F&G 상태 컬러링 */
 .fg-extreme-fear { color: #ff3c5f; }
 .fg-fear { color: #ff9f43; }
 .fg-neutral { color: #feca57; }
 .fg-greed { color: #00ff95; }
 .fg-extreme-greed { color: #00d2ff; }
 
-/* Market Sessions - 초록불 복구 */
+/* Market Sessions */
 .market-sessions { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .session-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
 .s-info { display: flex; flex-direction: column; }
@@ -47,22 +57,20 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 .active .s-dot { background: var(--up); box-shadow: 0 0 12px var(--up); animation: pulse 2s infinite; }
 .active .s-status { color: var(--up); }
 
-/* Dashboard Grid */
+/* Dashboard */
 .dashboard-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
 @media (max-width: 1100px) { .dashboard-content { grid-template-columns: 1fr; } }
-
 .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 25px; }
 .panel-header { margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
 .panel-header h2 { font-size: 1.1rem; margin: 0; letter-spacing: 1px; }
 
 .price-grid, .macro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .full-width { grid-column: 1 / -1; }
-
 .price-card, .macro-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
 .price-val, .m-price { font-size: 1.6rem; font-weight: 800; font-family: 'JetBrains Mono'; margin: 8px 0; }
 .price-chg { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.9rem; }
 
-/* 펀딩비 & 롱숏비 위젯 수정 */
+/* Insights */
 .insight-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
 .insight-box { background: #000; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
 .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -76,7 +84,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 .ls-fill.long { background: var(--up); }
 .ls-fill.short { background: var(--down); }
 
-/* 리퀴데이션 박스 수정 */
+/* Liq Box */
 .liq-wrapper { margin-top: 15px; background: #000; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .liq-header { padding: 12px 20px; font-size: 0.75rem; font-weight: 800; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
 .liq-sub { color: var(--dim); }
@@ -86,14 +94,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(0, 255, 149, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0); } }
 
-/* Utils */
+/* Flash & Utils */
 .text-up { color: var(--up); } .text-down { color: var(--down); }
 .flash-up { animation: flashUp 0.7s; }
 .flash-down { animation: flashDown 0.7s; }
 @keyframes flashUp { 0% { background: rgba(0,255,149,0.2); } 100% { background: var(--card); } }
 @keyframes flashDown { 0% { background: rgba(255,60,95,0.2); } 100% { background: var(--card); } }
 
-/* Modal */
 #chart-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 1000; }
 .modal-content { width: 90%; height: 85%; margin: 2% auto; position: relative; }
 .close-modal { position: absolute; top: -30px; right: 0; color: white; font-size: 30px; cursor: pointer; }
