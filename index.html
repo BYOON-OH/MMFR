@@ -65,20 +65,29 @@
 
                 <div class="insight-container">
                     <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC FUNDING / TIMER</span><span id="funding-timer" class="ins-timer">00:00:00</span></div>
+                        <div class="ins-header"><span class="ins-label">BTC DOMINANCE</span></div>
+                        <div id="btc-dom" class="ins-value">--%</div>
+                    </div>
+                    <div class="insight-box">
+                        <div class="ins-header"><span class="ins-label">BTC FUNDING / TIMER</span><span id="funding-timer" class="ins-timer">--</span></div>
                         <div id="btc-funding" class="ins-value">--%</div>
                     </div>
                     <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC OPEN INTEREST (24H)</span></div>
+                        <div class="ins-header"><span class="ins-label">OPEN INTEREST (24H)</span></div>
                         <div id="btc-oi" class="ins-value">--</div>
                     </div>
-                    <div class="insight-box full-width">
-                        <div class="ins-header"><span class="ins-label">LONG/SHORT RATIO (5M)</span><span id="ls-ratio-text" class="ls-ratio-val">--</span></div>
+                    <div class="insight-box">
+                        <div class="ins-header"><span class="ins-label">LONG/SHORT RATIO</span><span id="ls-ratio-text" class="ls-ratio-val">--</span></div>
                         <div class="ls-bar-visual">
                             <div id="long-bar" class="ls-fill long" style="width:50%"></div>
                             <div id="short-bar" class="ls-fill short" style="width:50%"></div>
                         </div>
                     </div>
+                </div>
+
+                <div class="liq-wrapper">
+                    <div class="liq-header"><span>LIVE LIQUIDATION</span><span class="liq-sub">BTC/ETH/SOL (>$2K)</span></div>
+                    <div id="liq-list" class="liq-list-box"></div>
                 </div>
             </div>
 
@@ -87,17 +96,12 @@
                 <div class="macro-grid">
                     <div class="macro-card"><span>NASDAQ</span><div id="price-nasdaq" class="m-price">--</div><div id="pct-nasdaq" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>S&P 500</span><div id="price-snp" class="m-price">--</div><div id="pct-snp" class="price-chg">--%</div></div>
+                    <div class="macro-card"><span>KOSPI</span><div id="price-kospi" class="m-price">--</div><div id="pct-kospi" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>GOLD</span><div id="price-gold" class="m-price">--</div><div id="pct-gold" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>SILVER</span><div id="price-silver" class="m-price">--</div><div id="pct-silver" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>US 10Y BOND</span><div id="price-us10y" class="m-price">--</div><div id="pct-us10y" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>USD/KRW</span><div id="price-usdkrw" class="m-price">--</div><div id="pct-usdkrw" class="price-chg">--%</div></div>
                     <div class="macro-card"><span>VIX INDEX</span><div id="price-vix" class="m-price">--</div><div id="pct-vix" class="price-chg">--%</div></div>
-                    <div class="macro-card"><span>BTC DOM</span><div id="btc-dom" class="m-price">--%</div><div class="price-chg">Market Cap</div></div>
-                </div>
-
-                <div class="liq-wrapper">
-                    <div class="liq-header"><span>LIVE LIQUIDATION</span><span class="liq-sub">BTC/ETH/SOL (>$2K)</span></div>
-                    <div id="liq-list" class="liq-list-box"></div>
                 </div>
             </div>
         </div>
