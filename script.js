@@ -7,8 +7,6 @@ socket.on('serverUpdate', data => updateServerUI(data));
 
 function updateServerUI(data) {
     if(!data || !data.macro) return;
-    
- 
     for (const [id, val] of Object.entries(data.macro)) {
         const pEl = document.getElementById(`price-${id}`);
         const cEl = document.getElementById(`pct-${id}`);
@@ -18,16 +16,12 @@ function updateServerUI(data) {
             cEl.className = `price-chg ${val.pct >= 0 ? 'text-up' : 'text-down'}`;
         }
     }
-
-
     const score = parseInt(data.fng.value);
     const scoreEl = document.getElementById('fg-score');
     const statusEl = document.getElementById('fg-status');
     const barEl = document.getElementById('fg-bar');
-
     if(scoreEl) scoreEl.innerText = score || '--';
     if(barEl) barEl.style.width = score + '%';
-    
     if(statusEl) {
         statusEl.innerText = data.fng.status;
         let colorClass = 'fg-neutral';
@@ -35,15 +29,12 @@ function updateServerUI(data) {
         else if(score <= 45) colorClass = 'fg-fear';
         else if(score >= 75) colorClass = 'fg-extreme-greed';
         else if(score >= 55) colorClass = 'fg-greed';
-        
         statusEl.className = `fg-status-label ${colorClass}`;
         if(scoreEl) scoreEl.className = `fg-score ${colorClass}`;
     }
 }
 
-
 const ws = new WebSocket(`wss://fstream.binance.com/ws/btcusdt@aggTrade/ethusdt@aggTrade/solusdt@aggTrade/xrpusdt@aggTrade/btcusdt@forceOrder`);
-
 ws.onmessage = (e) => {
     const d = JSON.parse(e.data);
     if (d.e === "aggTrade") {
@@ -61,7 +52,6 @@ ws.onmessage = (e) => {
         }
         prevPrices[id] = p;
     }
-
     if (d.e === "forceOrder") {
         const o = d.o;
         const amt = parseFloat(o.q) * parseFloat(o.p);
@@ -131,15 +121,35 @@ function runTimers() {
     }, 1000);
 }
 
+
 document.addEventListener('click', e => {
     const trigger = e.target.closest('.chart-trigger');
     if (trigger) {
         const symbol = trigger.id.split('-')[1].toUpperCase();
         document.getElementById('chart-modal').style.display = 'block';
-        new TradingView.widget({ "autosize": true, "symbol": `BINANCE:${symbol}USDT.P`, "interval": "15", "theme": "dark", "container_id": "tradingview_widget", "locale": "ko" });
+        
+ 
+        document.getElementById('tradingview_widget').innerHTML = '';
+        new TradingView.widget({
+            "width": "100%",
+            "height": "100%",
+            "symbol": `BINANCE:${symbol}USDT.P`,
+            "interval": "15",
+            "timezone": "Asia/Seoul",
+            "theme": "dark",
+            "style": "1",
+            "locale": "ko",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingview_widget"
+        });
     }
-    if (e.target.classList.contains('close-modal')) document.getElementById('chart-modal').style.display = 'none';
+    if (e.target.classList.contains('close-modal')) {
+        document.getElementById('chart-modal').style.display = 'none';
+        document.getElementById('tradingview_widget').innerHTML = ''; // 메모리 관리
+    }
 });
 
 runTimers(); updateCoinInsights(); setInterval(updateCoinInsights, 30000);
-
