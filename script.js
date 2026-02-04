@@ -8,7 +8,7 @@ socket.on('serverUpdate', data => updateServerUI(data));
 function updateServerUI(data) {
     if(!data || !data.macro) return;
     
-    // 매크로 지수 업데이트
+ 
     for (const [id, val] of Object.entries(data.macro)) {
         const pEl = document.getElementById(`price-${id}`);
         const cEl = document.getElementById(`pct-${id}`);
@@ -19,7 +19,7 @@ function updateServerUI(data) {
         }
     }
 
-    // [F&G 그라데이션 및 상태 업데이트]
+
     const score = parseInt(data.fng.value);
     const scoreEl = document.getElementById('fg-score');
     const statusEl = document.getElementById('fg-status');
@@ -41,7 +41,7 @@ function updateServerUI(data) {
     }
 }
 
-// 바이낸스 WebSocket (가격 & 청산)
+
 const ws = new WebSocket(`wss://fstream.binance.com/ws/btcusdt@aggTrade/ethusdt@aggTrade/solusdt@aggTrade/xrpusdt@aggTrade/btcusdt@forceOrder`);
 
 ws.onmessage = (e) => {
@@ -142,3 +142,4 @@ document.addEventListener('click', e => {
 });
 
 runTimers(); updateCoinInsights(); setInterval(updateCoinInsights, 30000);
+
