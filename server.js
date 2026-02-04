@@ -14,7 +14,10 @@ async function fetchAllData() {
             const res = await axios.get(url);
             if (res.data.chart.result) {
                 const m = res.data.chart.result[0].meta;
-                serverCache.macro[id] = { price: m.regularMarketPrice, pct: ((m.regularMarketPrice - m.chartPreviousClose) / m.chartPreviousClose * 100).toFixed(2) };
+                serverCache.macro[id] = { 
+                    price: m.regularMarketPrice, 
+                    pct: ((m.regularMarketPrice - m.chartPreviousClose) / m.chartPreviousClose * 100).toFixed(2) 
+                };
             }
         } catch (e) {}
     }
@@ -24,7 +27,11 @@ async function fetchAllData() {
     } catch (e) {}
     io.emit('serverUpdate', serverCache);
 }
-setInterval(fetchAllData, 60000); fetchAllData();
+
+
+setInterval(fetchAllData, 10000); 
+fetchAllData();
+
 app.use(express.static(__dirname));
 io.on('connection', (socket) => { socket.emit('initData', serverCache); });
 http.listen(process.env.PORT || 3000);
