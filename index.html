@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMFR QUANT TERMINAL FINAL</title>
+    <title>MMFR QUANT TERMINAL</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://s3.tradingview.com/tv.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -11,88 +11,21 @@
 <body>
     <div class="terminal-wrapper">
         <header class="main-header">
-            <div class="header-left">
-                <div class="brand-logo">MMFR <span class="live-tag">LIVE</span></div>
-                <div id="current-date" class="current-date">SERVER READY</div>
-            </div>
+            <div class="brand-logo">MMFR <span class="live-tag">LIVE</span></div>
             <section class="fg-widget-large">
                 <div class="fg-header">
-                    <span class="fg-title">MARKET SENTIMENT (F&G)</span>
+                    <span class="fg-title">SENTIMENT</span>
                     <span id="fg-status" class="fg-status-label">LOADING</span>
                 </div>
-                <div class="fg-main">
+                <div style="display: flex; align-items: baseline; gap: 15px;">
                     <span id="fg-score" class="fg-score">--</span>
                     <div class="fg-gauge-outer"><div id="fg-bar" class="fg-bar-fill"></div></div>
                 </div>
             </section>
         </header>
 
-        <div class="ai-insight-panel">
-            <div class="ai-header">
-                <div class="ai-icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <span class="ai-title">GEMINI QUANT INTELLIGENCE</span>
-            </div>
-            <div id="ai-briefing" class="ai-content">
-                시장 지표를 분석 중입니다. 잠시만 기다려 주십시오...
-                <span class="ai-typing"></span>
-            </div>
-        </div>
-    </div> ```
-
----
-
-### 3. script.js (AI 분석 브리핑 로직)
-`updateCoinInsights` 함수 내부의 마지막 부분에 분석 기능을 연동합니다.
-
-```javascript
-// ...기존 상단 로직 유지...
-
-// AI 브리핑 생성기
-function generateAIBriefing(data) {
-    const aiEl = document.getElementById('ai-briefing');
-    if (!aiEl) return;
-
-    let opinion = "";
-    const btcDom = parseFloat(document.getElementById('btc-dom').innerText);
-    const funding = parseFloat(document.getElementById('btc-funding').innerText);
-    const lsRatio = document.getElementById('ls-ratio-text').innerText;
-    const fng = parseInt(document.getElementById('fg-score').innerText);
-
-    // 1. 시장 분위기 파악
-    if (fng >= 75) opinion += "현재 시장은 **극도의 탐욕** 구간에 진입했습니다. ";
-    else if (fng <= 30) opinion += "현재 시장은 **패닉 셀링** 구간으로 공포가 지배적입니다. ";
-    else opinion += "시장은 현재 중립적인 흐름을 유지하며 방향성을 탐색 중입니다. ";
-
-    // 2. 펀딩비 및 롱숏비 분석
-    if (funding > 0.03) opinion += "펀딩비가 과도하게 높아 **롱 포지션 청산(Long Squeeze)** 위험이 큽니다. ";
-    else if (funding < -0.01) opinion += "역펀딩비가 관찰되며 **숏 스퀴즈** 가능성이 존재합니다. ";
-
-    // 3. 도미넌스 분석
-    if (btcDom > 55) opinion += "비트코인 도미넌스가 강세로 알트코인보다는 **비트코인 위주의 대응**이 유리합니다. ";
-    else opinion += "도미넌스가 하락하며 **알트코인 순환매 장세**가 이어질 수 있습니다. ";
-
-    // 4. 결론
-    opinion += "<br>📊 **투자 제언:** 데이터상으로는 " + (fng > 70 ? "추격 매수보다는 수익 실현" : "분할 매수 관점") + "이 유효해 보입니다. 리스크 관리에 유의하세요.";
-
-    // 타이핑 효과 구현 (간단하게)
-    aiEl.innerHTML = opinion + '<span class="ai-typing"></span>';
-}
-
-// 기존 updateCoinInsights 함수 끝부분에 generateAIBriefing() 호출 추가
-async function updateCoinInsights() {
-    try {
-        // ... 기존 fetch 코드들 ...
-        
-        // 데이터 업데이트 후 AI 브리핑 호출
-        setTimeout(generateAIBriefing, 1000); 
-    } catch(e) {}
-}
-
-// ... 나머지 기존 코드 유지 ...
         <div class="market-sessions">
-            <div class="session-box" id="sess-tokyo"><div class="s-info"><span class="s-name">SEOUL / TOKYO</span><span class="s-time">09:00 - 15:30</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
+            <div class="session-box" id="sess-tokyo"><div class="s-info"><span class="s-name">TOKYO / SEOUL</span><span class="s-time">09:00 - 15:30</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
             <div class="session-box" id="sess-london"><div class="s-info"><span class="s-name">LONDON</span><span class="s-time">17:00 - 01:00</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
             <div class="session-box" id="sess-newyork"><div class="s-info"><span class="s-name">NEW YORK</span><span class="s-time">22:30 - 05:00</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
         </div>
@@ -103,44 +36,47 @@ async function updateCoinInsights() {
                 <div class="price-grid">
                     <div class="price-card chart-trigger" id="card-btc"><span class="coin-name">BTC/USDT</span><div class="price-val" id="price-btc">0</div><div class="price-chg" id="pct-btc">0.00%</div></div>
                     <div class="price-card chart-trigger" id="card-eth"><span class="coin-name">ETH/USDT</span><div class="price-val" id="price-eth">0</div><div class="price-chg" id="pct-eth">0.00%</div></div>
-                    <div class="price-card chart-trigger" id="card-sol"><span class="coin-name">SOL/USDT</span><div class="price-val" id="price-sol">0</div><div class="price-chg" id="pct-sol">0.00%</div></div>
-                    <div class="price-card chart-trigger" id="card-xrp"><span class="coin-name">XRP/USDT</span><div class="price-val" id="price-xrp">0</div><div class="price-chg" id="pct-xrp">0.00%</div></div>
-                    <div class="price-card"><span class="coin-name">BTC DOMINANCE</span><div class="price-val" id="btc-dom">--.-%</div><div class="price-chg text-up">MARKET CAP %</div></div>
-                    <div class="price-card"><span class="coin-name">BTC OPEN INTEREST</span><div class="price-val" id="btc-oi">$--B</div><div class="price-chg text-accent">BINANCE FUTURES</div></div>
+                    <div class="price-card"><span class="coin-name">BTC DOMINANCE</span><div class="price-val" id="btc-dom">--%</div><div class="price-chg text-up" style="font-size: 0.7rem;">MARKET CAP %</div></div>
+                    <div class="price-card"><span class="coin-name">OPEN INTEREST</span><div class="price-val" id="btc-oi">$--B</div><div id="current-date" style="font-size: 0.7rem; color: var(--dim);">READY</div></div>
                 </div>
+                
                 <div class="insight-container">
                     <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC FUNDING RATE</span><span id="funding-timer" class="ins-timer">00:00:00</span></div>
-                        <div id="btc-funding" class="ins-value">0.0000%</div>
+                        <span class="ins-label">FUNDING RATE <span id="funding-timer" style="color:var(--accent); float:right;">00:00</span></span>
+                        <span id="btc-funding" class="ins-value">0.0000%</span>
                     </div>
                     <div class="insight-box">
-                        <div class="ins-header"><span class="ins-label">BTC L/S RATIO (5M)</span><span id="ls-ratio-text" class="ins-ratio-val">--</span></div>
+                        <span class="ins-label">L/S RATIO (5M) <span id="ls-ratio-text" style="float:right;">--</span></span>
                         <div class="ls-bar-visual"><div id="long-bar" class="ls-fill long"></div><div id="short-bar" class="ls-fill short"></div></div>
                     </div>
                 </div>
+
                 <div class="liq-wrapper">
-                    <div class="liq-header">LIVE LIQUIDATIONS <span class="liq-sub">AUTO-REMOVE (5S)</span></div>
+                    <div class="liq-header">LIVE LIQUIDATIONS</div>
                     <div id="liq-list" class="liq-list-box"></div>
                 </div>
             </div>
 
             <div class="panel">
                 <div class="panel-header"><h2>GLOBAL MACRO</h2></div>
-                <div class="macro-grid" id="macro-container">
-                    <div class="macro-card" id="card-nasdaq"><span class="m-label">NASDAQ 100</span><div class="m-price" id="price-nasdaq">---</div><div class="price-chg" id="pct-nasdaq">--</div></div>
-                    <div class="macro-card" id="card-snp"><span class="m-label">S&P 500</span><div class="m-price" id="price-snp">---</div><div class="price-chg" id="pct-snp">--</div></div>
-                    <div class="macro-card" id="card-gold"><span class="m-label">GOLD</span><div class="m-price" id="price-gold">---</div><div class="price-chg" id="pct-gold">--</div></div>
-                    <div class="macro-card" id="card-silver"><span class="m-label">SILVER</span><div class="m-price" id="price-silver">---</div><div class="price-chg" id="pct-silver">--</div></div>
-                    <div class="macro-card" id="card-us10y"><span class="m-label">US 10Y YIELD</span><div class="m-price" id="price-us10y">---</div><div class="price-chg" id="pct-us10y">--</div></div>
-                    <div class="macro-card" id="card-kospi"><span class="m-label">KOSPI</span><div class="m-price" id="price-kospi">---</div><div class="price-chg" id="pct-kospi">--</div></div>
-                    <div class="macro-card full-width"><span class="m-label">USD/KRW EXCHANGE</span><div class="m-price large" id="price-usdkrw">---</div><div class="price-chg" id="pct-usdkrw">--</div></div>
-                    <div class="macro-card full-width"><span class="m-label">VIX VOLATILITY</span><div class="m-price large" id="price-vix">---</div><div class="price-chg" id="pct-vix">--</div></div>
+                <div class="macro-grid">
+                    <div class="macro-card" id="card-nasdaq"><span class="m-label">NASDAQ 100</span><div class="m-price" id="price-nasdaq">0</div><div class="price-chg" id="pct-nasdaq">0%</div></div>
+                    <div class="macro-card" id="card-snp"><span class="m-label">S&P 500</span><div class="m-price" id="price-snp">0</div><div class="price-chg" id="pct-snp">0%</div></div>
+                    <div class="macro-card" id="card-gold"><span class="m-label">GOLD</span><div class="m-price" id="price-gold">0</div><div class="price-chg" id="pct-gold">0%</div></div>
+                    <div class="macro-card" id="card-usdkrw"><span class="m-label">USD/KRW</span><div class="m-price" id="price-usdkrw">0</div><div class="price-chg" id="pct-usdkrw">0%</div></div>
+                    <div class="macro-card" id="card-vix"><span class="m-label">VIX</span><div class="m-price" id="price-vix">0</div><div class="price-chg" id="pct-vix">0%</div></div>
+                    <div class="macro-card" id="card-us10y"><span class="m-label">US 10Y</span><div class="m-price" id="price-us10y">0</div><div class="price-chg" id="pct-us10y">0%</div></div>
                 </div>
             </div>
         </div>
+
+        <div class="ai-insight-panel">
+            <div class="ai-header"><span class="ai-title">AI QUANT INSIGHT</span></div>
+            <div id="ai-briefing" class="ai-content">시장 데이터를 수집하고 분석 중입니다... <span class="ai-typing"></span></div>
+        </div>
     </div>
-    <div id="chart-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><div id="tradingview_widget"></div></div></div>
+
+    <div id="chart-modal"><div class="modal-content"><span class="close-modal">&times;</span><div id="tradingview_widget"></div></div></div>
     <script src="script.js"></script>
 </body>
 </html>
-
