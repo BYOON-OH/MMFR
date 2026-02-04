@@ -27,6 +27,70 @@
             </section>
         </header>
 
+        <div class="ai-insight-panel">
+            <div class="ai-header">
+                <div class="ai-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <span class="ai-title">GEMINI QUANT INTELLIGENCE</span>
+            </div>
+            <div id="ai-briefing" class="ai-content">
+                시장 지표를 분석 중입니다. 잠시만 기다려 주십시오...
+                <span class="ai-typing"></span>
+            </div>
+        </div>
+    </div> ```
+
+---
+
+### 3. script.js (AI 분석 브리핑 로직)
+`updateCoinInsights` 함수 내부의 마지막 부분에 분석 기능을 연동합니다.
+
+```javascript
+// ...기존 상단 로직 유지...
+
+// AI 브리핑 생성기
+function generateAIBriefing(data) {
+    const aiEl = document.getElementById('ai-briefing');
+    if (!aiEl) return;
+
+    let opinion = "";
+    const btcDom = parseFloat(document.getElementById('btc-dom').innerText);
+    const funding = parseFloat(document.getElementById('btc-funding').innerText);
+    const lsRatio = document.getElementById('ls-ratio-text').innerText;
+    const fng = parseInt(document.getElementById('fg-score').innerText);
+
+    // 1. 시장 분위기 파악
+    if (fng >= 75) opinion += "현재 시장은 **극도의 탐욕** 구간에 진입했습니다. ";
+    else if (fng <= 30) opinion += "현재 시장은 **패닉 셀링** 구간으로 공포가 지배적입니다. ";
+    else opinion += "시장은 현재 중립적인 흐름을 유지하며 방향성을 탐색 중입니다. ";
+
+    // 2. 펀딩비 및 롱숏비 분석
+    if (funding > 0.03) opinion += "펀딩비가 과도하게 높아 **롱 포지션 청산(Long Squeeze)** 위험이 큽니다. ";
+    else if (funding < -0.01) opinion += "역펀딩비가 관찰되며 **숏 스퀴즈** 가능성이 존재합니다. ";
+
+    // 3. 도미넌스 분석
+    if (btcDom > 55) opinion += "비트코인 도미넌스가 강세로 알트코인보다는 **비트코인 위주의 대응**이 유리합니다. ";
+    else opinion += "도미넌스가 하락하며 **알트코인 순환매 장세**가 이어질 수 있습니다. ";
+
+    // 4. 결론
+    opinion += "<br>📊 **투자 제언:** 데이터상으로는 " + (fng > 70 ? "추격 매수보다는 수익 실현" : "분할 매수 관점") + "이 유효해 보입니다. 리스크 관리에 유의하세요.";
+
+    // 타이핑 효과 구현 (간단하게)
+    aiEl.innerHTML = opinion + '<span class="ai-typing"></span>';
+}
+
+// 기존 updateCoinInsights 함수 끝부분에 generateAIBriefing() 호출 추가
+async function updateCoinInsights() {
+    try {
+        // ... 기존 fetch 코드들 ...
+        
+        // 데이터 업데이트 후 AI 브리핑 호출
+        setTimeout(generateAIBriefing, 1000); 
+    } catch(e) {}
+}
+
+// ... 나머지 기존 코드 유지 ...
         <div class="market-sessions">
             <div class="session-box" id="sess-tokyo"><div class="s-info"><span class="s-name">SEOUL / TOKYO</span><span class="s-time">09:00 - 15:30</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
             <div class="session-box" id="sess-london"><div class="s-info"><span class="s-name">LONDON</span><span class="s-time">17:00 - 01:00</span></div><div class="s-indicator"><span class="s-status">CLOSED</span><span class="s-dot"></span></div></div>
@@ -79,3 +143,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
