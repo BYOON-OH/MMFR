@@ -7,7 +7,7 @@ const io = require('socket.io')(http);
 let serverCache = { macro: {}, fng: { value: "--", status: "LOADING" } };
 const MACRO_SYMBOLS = { 
     'nasdaq': '^IXIC', 'snp': '^GSPC', 'gold': 'GC=F', 
-    'silver': 'SI=F', 'us10y': '^TNX', 'kospi': '^KS11', 
+    'silver': 'SI=F', 'us10y': '^TNX', 'kospi': '^KS11', // 코스피 유지
     'usdkrw': 'KRW=X', 'vix': '^VIX' 
 };
 
@@ -32,12 +32,9 @@ async function fetchAllData() {
     io.emit('serverUpdate', serverCache);
 }
 
-
 setInterval(fetchAllData, 10000); 
 fetchAllData();
 
 app.use(express.static(__dirname));
 io.on('connection', (socket) => { socket.emit('initData', serverCache); });
-http.listen(process.env.PORT || 3000, () => {
-    console.log('Quant Terminal Server Running on port 3000');
-});
+http.listen(process.env.PORT || 3000);
